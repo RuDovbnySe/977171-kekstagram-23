@@ -1,13 +1,3 @@
-const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
-const getLineLength = (line, lineMax) => {
-  if (line.length <= lineMax) {
-    return true;
-  }
-};
-
-getLineLength('Это позитивно', 140);
-
 const MESSAGES = [
   'Всё отлично!',
   'В целом неплохо. Но не всё.',
@@ -49,51 +39,55 @@ const MAX_LIKE = 200;
 const MAX_COMMENT = 10;
 const NUMBER_PICTURE = 25;
 
+//рандомное число из диапазона
+const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
+//возвращает true если длинна элемента меньше заданного числа
+const getLineLength = (line, lineMax) => {
+  if (line.length <= lineMax) {
+    return true;
+  }
+};
+
+getLineLength('Это позитивно', 140);
+
 // рандомный элемент массива
 const getRandomArrayElement = (elements) => {
-  return elements[getRandomNumber(0, elements.length)];
+  if (MAX_LIKE > MIN_LIKE) {
+    return elements[getRandomNumber(0, elements.length - 1)];
+  }
 };
 
 // рандомный элемент массива комментариев
-const createComment = (i) => {
-  return {
-    id: i + 1,
-    avatar: `img/avatar-${getRandomNumber(1, MAX_AVATAR)}.svg`,
-    message: getRandomArrayElement(MESSAGES),
-    name: getRandomArrayElement(USERS_NAMES),
-  };
+const createComment = (idUser) => {
+  if (MAX_LIKE > MIN_LIKE) {
+    return {
+      id: idUser + 1,
+      avatar: `img/avatar-${getRandomNumber(1, MAX_AVATAR)}.svg`,
+      message: getRandomArrayElement(MESSAGES),
+      name: getRandomArrayElement(USERS_NAMES),
+    };
+  }
 };
 
 // создаём массив комментов
-let comments = [];
-
-for (let i = 0; i < MAX_COMMENT; i++) {
-  const createCommentsData = createComment(i);
-  comments.push(createCommentsData);
-};
-
+const similarComment = new Array(MAX_COMMENT).fill(null).map((item, index) => createComment(index));
 
 // рандомный элемент массива фото с комментами
-const createPhoto = (i) => {
-  return {
-    id: i + 1,
-    url: `photos/${i + 1}.jpg`,
-    description: getRandomArrayElement(DESCRIPTIONS),
-    likes: getRandomNumber(MIN_LIKE, MAX_LIKE),
-    comments: getRandomArrayElement(comments),
-  };
+const createPhoto = (idDescription) => {
+  if (MAX_LIKE > MIN_LIKE) {
+    return {
+      id: idDescription + 1,
+      url: `photos/${idDescription + 1}.jpg`,
+      description: getRandomArrayElement(DESCRIPTIONS),
+      likes: getRandomNumber(MIN_LIKE, MAX_LIKE),
+      comments: getRandomArrayElement(similarComment),
+    };
+  }
 };
-
-// const similarPhoto = new Array(NUMBER_PICTURE).fill(null).map(() => createPhoto());
-// console.log(similarPhoto);
 
 // создаём массив фото с комментами
-let pictures = [];
+const similarPhoto = new Array(NUMBER_PICTURE).fill(null).map((item, index) => createPhoto(index));
 
-for (let i = 0; i < NUMBER_PICTURE; i++) {
-  const createPhototsData = createPhoto(i);
-  pictures.push(createPhototsData);
-};
-
-console.log(pictures);
-console.log(comments);
+similarPhoto;
+// console.log(similarPhoto);
