@@ -52,39 +52,29 @@ const getLineLength = (line, lineMax) => {
 getLineLength('Это позитивно', 140);
 
 // рандомный элемент массива
-const getRandomArrayElement = (elements) => {
-  if (MAX_LIKE > MIN_LIKE) {
-    return elements[getRandomNumber(0, elements.length - 1)];
-  }
-};
+const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
 // рандомный элемент массива комментариев
-const createComment = (idUser) => {
-  if (MAX_LIKE > MIN_LIKE) {
-    return {
-      id: idUser + 1,
-      avatar: `img/avatar-${getRandomNumber(1, MAX_AVATAR)}.svg`,
-      message: getRandomArrayElement(MESSAGES),
-      name: getRandomArrayElement(USERS_NAMES),
-    };
-  }
-};
+const createComment = (idUser) => ({
+  id: idUser + 1,
+  avatar: `img/avatar-${getRandomNumber(1, MAX_AVATAR)}.svg`,
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(USERS_NAMES),
+});
 
 // создаём массив комментов
 const similarComment = new Array(MAX_COMMENT).fill(null).map((item, index) => createComment(index));
+similarComment.slice(0,getRandomNumber(1, MAX_COMMENT));
 
 // рандомный элемент массива фото с комментами
-const createPhoto = (idDescription) => {
-  if (MAX_LIKE > MIN_LIKE) {
-    return {
-      id: idDescription + 1,
-      url: `photos/${idDescription + 1}.jpg`,
-      description: getRandomArrayElement(DESCRIPTIONS),
-      likes: getRandomNumber(MIN_LIKE, MAX_LIKE),
-      comments: getRandomArrayElement(similarComment),
-    };
-  }
-};
+// комментарии это случайный массив рандомной длины из массива комментариев
+const createPhoto = (idDescription) => ({
+  id: idDescription + 1,
+  url: `photos/${idDescription + 1}.jpg`,
+  description: getRandomArrayElement(DESCRIPTIONS),
+  likes: getRandomNumber(MIN_LIKE, MAX_LIKE),
+  comments: similarComment.slice(0,getRandomNumber(1, MAX_COMMENT)),
+});
 
 // создаём массив фото с комментами
 const similarPhoto = new Array(NUMBER_PICTURE).fill(null).map((item, index) => createPhoto(index));
