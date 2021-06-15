@@ -1,6 +1,6 @@
-import {similarPhoto} from './data-photo';
+import {similarPhotos} from './data-photo';
 
-similarPhoto;
+similarPhotos;
 
 // const MESSAGES = [
 //   'Всё отлично!',

@@ -1,7 +1,5 @@
-import {similarComment} from './data-comments';
-import {getRandomArrayElement} from './util';
-import {getRandomNumber} from './util';
-import {MAX_COMMENT} from './data-comments';
+import {similarComments, MAX_COMMENT} from './data-comments';
+import {getRandomArrayElement, getRandomNumber} from './util';
 
 const DESCRIPTIONS = [
   'Фокус размыт.',
@@ -28,12 +26,10 @@ const createPhoto = (idDescription) => ({
   url: `photos/${idDescription + 1}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
   likes: getRandomNumber(MIN_LIKE, MAX_LIKE),
-  comments: similarComment.slice(0,getRandomNumber(1, MAX_COMMENT)),
+  comments: similarComments.slice(0,getRandomNumber(1, MAX_COMMENT)),
 });
 
 // создаём массив фото с комментами
-const similarPhoto = new Array(NUMBER_PICTURE).fill(null).map((item, index) => createPhoto(index));
+const similarPhotos = new Array(NUMBER_PICTURE).fill(null).map((item, index) => createPhoto(index));
 
-similarPhoto;
-
-export {similarPhoto};
+export {similarPhotos};

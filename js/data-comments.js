@@ -1,5 +1,4 @@
-import {getRandomArrayElement} from './util';
-import {getRandomNumber} from './util';
+import {getRandomArrayElement, getRandomNumber} from './util';
 
 const MESSAGES = [
   'Всё отлично!',
@@ -34,7 +33,6 @@ const createComment = (idUser) => ({
 });
 
 // создаём массив комментов
-const similarComment = new Array(MAX_COMMENT).fill(null).map((item, index) => createComment(index));
-similarComment.slice(0,getRandomNumber(1, MAX_COMMENT));
+const similarComments = new Array(MAX_COMMENT).fill(null).map((item, index) => createComment(index));
 
-export {similarComment, MAX_COMMENT};
+export {similarComments, MAX_COMMENT};

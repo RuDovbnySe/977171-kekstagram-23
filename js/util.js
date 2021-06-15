@@ -4,5 +4,4 @@ const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)
 // рандомный элемент массива
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-export {getRandomArrayElement};
-export {getRandomNumber};
+export {getRandomArrayElement, getRandomNumber};
