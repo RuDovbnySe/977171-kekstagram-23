@@ -1,5 +1,5 @@
-import {similarComments, MAX_COMMENT} from './data-comments';
-import {getRandomArrayElement, getRandomNumber} from './util';
+import {similarComments, MAX_COMMENT} from './data-comments.js';
+import {getRandomArrayElement, getRandomNumber} from './util.js';
 
 const DESCRIPTIONS = [
   'Фокус размыт.',

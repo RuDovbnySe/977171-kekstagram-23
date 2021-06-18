@@ -1,3 +1,1 @@
-import {photoOtherUsers} from './miniatures';
-
-photoOtherUsers;
+import './miniatures.js';
