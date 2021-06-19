@@ -31,7 +31,7 @@ const createCommentContainer = (array) => {
 photoOtherUsers.addEventListener('click', (evt) => {
   evt.preventDefault();
   // Индекс фото, которое кликнуто
-  // const photoIndex = bigPicture.indexOf(evt.target);
+  // const photoIndex = photoOtherUsers.indexOf(evt.target);
 
   // загружаем атрибуты в разметку
   bigPicture.querySelector('.big-picture__img img').src = similarPhotos[0].url;
