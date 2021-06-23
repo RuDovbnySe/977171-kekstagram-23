@@ -5,7 +5,7 @@ import {isEscEvent} from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const commentParent = bigPicture.querySelector('.big-picture__social');
-const bigPictureCloseButton = bigPicture.querySelector('#picture-cancel');
+const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 
 // генерация списка с комментариями
 const createCommentContainer = (array) => {
@@ -72,7 +72,7 @@ photoOtherUsers.addEventListener('click', (evt) => {
 });
 
 //событие по нажатию 'Закрыть' мышкой для закрытия большого изображения
-bigPictureCloseButton.addEventListener('click', (evt) => {
+closeBigPictureButton.addEventListener('click', (evt) => {
   closeBigPictureModal(evt);
 });
 
