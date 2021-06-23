@@ -1,10 +1,11 @@
 import {photoOtherUsers} from './miniatures.js';
 import {similarPhotos} from './data-photo.js';
 import {similarComments} from './data-comments.js';
+import {isEscEvent} from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const commentParent = bigPicture.querySelector('.big-picture__social');
-const closeBigPicture = bigPicture.querySelector('#picture-cancel');
+const bigPictureCloseButton = bigPicture.querySelector('#picture-cancel');
 
 // генерация списка с комментариями
 const createCommentContainer = (array) => {
@@ -28,33 +29,58 @@ const createCommentContainer = (array) => {
   return list;
 };
 
+// показываем блок с полной картинкой, удалив класс hidden
+const openBigPictureModal = () => {
+  bigPicture.classList.remove('hidden');
+
+  document.removeEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      bigPicture.classList.add('hidden');
+    }
+  });
+};
+
+const closeBigPictureModal = () => {
+  bigPicture.classList.add('hidden');
+
+  document.removeEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      bigPicture.classList.add('hidden');
+    }
+  });
+};
+
+
 photoOtherUsers.addEventListener('click', (evt) => {
   evt.preventDefault();
   // Индекс фото, которое кликнуто
-  // const photoIndex = photoOtherUsers.indexOf(evt.target);
+  const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
+  const photoIndex = pictures.indexOf(evt.target.closest('.picture'));
 
   // загружаем атрибуты в разметку
-  bigPicture.querySelector('.big-picture__img img').src = similarPhotos[0].url;
-  bigPicture.querySelector('.likes-count').textContent = similarPhotos[0].likes;
-  bigPicture.querySelector('.comments-count').textContent = similarPhotos[0].comment;
-  bigPicture.querySelector('.social__caption').textContent = similarPhotos[0].description;
+  bigPicture.querySelector('.big-picture__img img').src = similarPhotos[photoIndex].url;
+  bigPicture.querySelector('.likes-count').textContent = similarPhotos[photoIndex].likes;
+  bigPicture.querySelector('.comments-count').textContent = similarPhotos[photoIndex].comment;
+  bigPicture.querySelector('.social__caption').textContent = similarPhotos[photoIndex].description;
 
   commentParent.appendChild(createCommentContainer(similarComments));
 
   // показываем блок с полной картинкой, удалив класс hidden
-  bigPicture.classList.remove('hidden');
+  openBigPictureModal();
 });
 
-// убираем блок с полной картинкой, добавив класс hidden по клику на закрывающую кнопку
-closeBigPicture.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  bigPicture.classList.add('hidden');
+//событие по нажатию 'Закрыть' мышкой для закрытия большого изображения
+bigPictureCloseButton.addEventListener('click', (evt) => {
+  closeBigPictureModal(evt);
 });
 
-// убираем блок с полной картинкой, добавив класс hidden по нажатию escape на клавиатуре
+//Событие по нажатию Escape для закрытия большого изображения
 document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    bigPicture.classList.add('hidden');
+  if (isEscEvent(evt)) {
+    closeBigPictureModal();
   }
 });
+
+export {bigPicture};
