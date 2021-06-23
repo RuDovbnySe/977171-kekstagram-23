@@ -8,26 +8,32 @@ const commentParent = bigPicture.querySelector('.big-picture__social');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 
 // генерация списка с комментариями
-const createCommentContainer = (array) => {
+const createComments = similarComments;
+
+const similarCometFragment = document.createDocumentFragment();
+
+const createCommentContainer = () => {
   const list = document.createElement('ul');
   list.classList.add('social__comments');
-  for (let index = 0; index < array.length; index++) {
+
+  createComments.forEach(({avatar, name, message}) => {
     const li = document.createElement('li');
     li.classList.add('social__comment');
     list.appendChild(li);
     const img = document.createElement('img');
     img.classList.add('social__picture');
-    img.setAttribute('src', array[index].avatar);
-    img.setAttribute('alt', array[index].name);
+    img.setAttribute('src', avatar);
+    img.setAttribute('alt', name);
     li.appendChild(img);
     const paragraph = document.createElement('p');
     paragraph.classList.add('social__text');
-    paragraph.textContent = array[index].message;
+    paragraph.textContent = message;
     li.appendChild(paragraph);
-  }
-
-  return list;
+  });
+  similarCometFragment.appendChild(list);
 };
+
+createCommentContainer();
 
 // показываем блок с полной картинкой, удалив класс hidden
 const openBigPictureModal = () => {
@@ -52,7 +58,6 @@ const closeBigPictureModal = () => {
   });
 };
 
-
 photoOtherUsers.addEventListener('click', (evt) => {
   evt.preventDefault();
   // Индекс фото, которое кликнуто
@@ -65,7 +70,7 @@ photoOtherUsers.addEventListener('click', (evt) => {
   bigPicture.querySelector('.comments-count').textContent = similarPhotos[photoIndex].comment;
   bigPicture.querySelector('.social__caption').textContent = similarPhotos[photoIndex].description;
 
-  commentParent.appendChild(createCommentContainer(similarComments));
+  commentParent.appendChild(similarCometFragment);
 
   // показываем блок с полной картинкой, удалив класс hidden
   openBigPictureModal();
