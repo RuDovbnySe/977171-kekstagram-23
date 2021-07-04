@@ -7,7 +7,7 @@ const bigPicture = document.querySelector('.big-picture');
 const commentParent = bigPicture.querySelector('.big-picture__social');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
-const commentCounter = bigPicture.querySelector('.social__comment-count');
+const numberComments = bigPicture.querySelector('.social__comment-count');
 const newCommentLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
 
@@ -55,18 +55,18 @@ const onPopupEscKeydown = (evt) => {
 // показываем блок с полной картинкой, удалив класс hidden
 const openBigPictureModal = () => {
   bigPicture.classList.remove('hidden');
-  commentCounter.classList.add('hidden');
+  numberComments.classList.add('hidden');
   newCommentLoader.classList.add('hidden');
-  body.classList.add('.modal-open');
+  body.classList.add('modal-open');
 
   document.addEventListener('keydown', onPopupEscKeydown);
 };
 
 const closeBigPictureModal = () => {
   bigPicture.classList.add('hidden');
-  commentCounter.classList.remove('hidden');
+  numberComments.classList.remove('hidden');
   newCommentLoader.classList.remove('hidden');
-  body.classList.remove('.modal-open');
+  body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
@@ -95,4 +95,4 @@ closeBigPictureButton.addEventListener('click', (evt) => {
   closeBigPictureModal(evt);
 });
 
-export {bigPicture};
+export {bigPicture, body};
