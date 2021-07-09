@@ -7,7 +7,8 @@ const bigPicture = document.querySelector('.big-picture');
 const commentParent = bigPicture.querySelector('.big-picture__social');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
-const numberComments = bigPicture.querySelector('.social__comment-count');
+
+const commentsNumber = bigPicture.querySelector('.social__comment-count');
 const newCommentLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
 
@@ -55,7 +56,7 @@ const onPopupEscKeydown = (evt) => {
 // показываем блок с полной картинкой, удалив класс hidden
 const openBigPictureModal = () => {
   bigPicture.classList.remove('hidden');
-  numberComments.classList.add('hidden');
+  commentsNumber.classList.add('hidden');
   newCommentLoader.classList.add('hidden');
   body.classList.add('modal-open');
 
@@ -64,7 +65,7 @@ const openBigPictureModal = () => {
 
 const closeBigPictureModal = () => {
   bigPicture.classList.add('hidden');
-  numberComments.classList.remove('hidden');
+  commentsNumber.classList.remove('hidden');
   newCommentLoader.classList.remove('hidden');
   body.classList.remove('modal-open');
 
@@ -81,7 +82,7 @@ photoOtherUsers.addEventListener('click', (evt) => {
   // загружаем атрибуты в разметку
   bigPicture.querySelector('.big-picture__img img').src = similarPhotos[photoIndex].url;
   bigPicture.querySelector('.likes-count').textContent = similarPhotos[photoIndex].likes;
-  bigPicture.querySelector('.comments-count').textContent = similarComments.length;
+  bigPicture.querySelector('.comments-count').textContent = similarPhotos[photoIndex].comments.length;
   bigPicture.querySelector('.social__caption').textContent = similarPhotos[photoIndex].description;
 
   commentParent.appendChild(similarCometFragment);
