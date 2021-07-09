@@ -13,7 +13,8 @@ const imageEditor = document.querySelector('.img-upload__overlay');
 const uploadFileTextHashtags = document.querySelector('.text__hashtags');
 // const uploadFileTextDescription = document.querySelector('.text__description');
 const MIN_HASHTAG_LENGTH = 2;
-const MAX_HASHTAG_LENGTH = 20;
+// const MAX_HASHTAG_LENGTH = 20;
+const MAX_HASHTAGS = 5;
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
@@ -50,23 +51,36 @@ uploadCancel.addEventListener('click', (evt) => {
 
 //вывод сообщения при некорректном вводе хэштега
 uploadFileTextHashtags.addEventListener('input', () => {
-  const valueLength = uploadFileTextHashtags.value.length;
-  const regular = /^#[A-Za-zА-Яа-я0-9]{1,19}$/;
+  const regular = /^#(?=.*[^0-9])[a-zA-Zа-яА-ЯЁё0-9]{1,19}$/;
 
-  if (valueLength < MIN_HASHTAG_LENGTH) {
-    uploadFileTextHashtags.setCustomValidity(`Ещё ${MIN_HASHTAG_LENGTH - valueLength} симв.`);
-  } else if (valueLength > MAX_HASHTAG_LENGTH) {
-    uploadFileTextHashtags.setCustomValidity(`Удалите лишние ${valueLength - MAX_HASHTAG_LENGTH} симв.`);
-  } else if (regular.test(uploadFileTextHashtags.value)) {
-    uploadFileTextHashtags.setCustomValidity('Некорректный хэштег');
-  } else if (uploadFileTextHashtags.value[0] !== '#') {
-    uploadFileTextHashtags.setCustomValidity('Первый символ хештега обязательно #');
-  } else {
-    uploadFileTextHashtags.setCustomValidity('');
-  }
+  const tags = uploadFileTextHashtags.value
+    .trim() // удаляем пробелы в начале и в конце строки
+    .toLowerCase() //хэш-теги нечувствительны к регистру
+    .split(' ')// преобразуем строку в массив, пробел используется как разделитель
+    .filter((tag) => tag); //удаляем пустые тэги, если пользователь ввёл несколько пробелов
 
-  // const output = uploadFileTextHashtags.value.join(' #');
-  // console.log(output);
+  const tagsArray = new Set(tags);
+  let numberTags = 0;
+  const checkNumberTags = () => {
+    if (tags.length > MAX_HASHTAGS) {
+      numberTags = 1;
+    }
+  };
+  checkNumberTags();
+  // eslint-disable-next-line
+  console.log(tagsArray);
+
+  tagsArray.forEach((tag) => {
+    if (regular.test(tag)) {
+      uploadFileTextHashtags.setCustomValidity('Некорректный хэштег');
+    } else if (tag.length < MIN_HASHTAG_LENGTH) {
+      uploadFileTextHashtags.setCustomValidity(`Ещё ${MIN_HASHTAG_LENGTH - tag.length} симв.`);
+    } else if (numberTags === 1) {
+      uploadFileTextHashtags.setCustomValidity('Максимально 5 хештегов, пожалуйста удалите лишние');
+    } else {
+      uploadFileTextHashtags.setCustomValidity('');
+    }
+  });
 
   uploadFileTextHashtags.reportValidity();
 });
