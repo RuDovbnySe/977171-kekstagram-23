@@ -75,6 +75,9 @@ const closeBigPictureModal = () => {
 const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
 
 photoOtherUsers.addEventListener('click', (evt) => {
+  if (!evt.target.closest('.picture')) {
+    return;
+  }
   evt.preventDefault();
   // Индекс фото, которое кликнуто
   const photoIndex = pictures.indexOf(evt.target.closest('.picture'));

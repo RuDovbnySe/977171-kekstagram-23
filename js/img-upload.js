@@ -1,22 +1,13 @@
 import {isEscEvent} from './util.js';
-// потом удалить эту строку
-// const body = document.querySelector('body');
-
-// и раскомментировать эту
-// всё из-за наложения слушателей событий, нужно из big-foto исключить блок с загрузкой фото
 import {body} from './big-photo.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('.img-upload__cancel');
 const imageEditor = document.querySelector('.img-upload__overlay');
 const uploadFileTextHashtags = document.querySelector('.text__hashtags');
-const uploadFileContainer = document.querySelector('.img-upload__start');
-// const uploadFileTextDescription = document.querySelector('.text__description');
 const MIN_HASHTAG_LENGTH = 2;
 // const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS = 5;
-
-uploadFileContainer.removeEventListener('click', (evt) => evt);
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
