@@ -5,8 +5,6 @@ const uploadFile = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('.img-upload__cancel');
 const imageEditor = document.querySelector('.img-upload__overlay');
 const uploadFileTextHashtags = document.querySelector('.text__hashtags');
-const MIN_HASHTAG_LENGTH = 2;
-// const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAGS = 5;
 
 const onPopupEscKeydown = (evt) => {
@@ -53,25 +51,16 @@ uploadFileTextHashtags.addEventListener('input', () => {
     .filter((tag) => tag); //удаляем пустые тэги, если пользователь ввёл несколько пробелов
 
   const tagsArray = new Set(tags);
-  let numberTags = 0;
-  const checkNumberTags = () => {
-    if (tags.length > MAX_HASHTAGS) {
-      numberTags = 1;
-    }
-  };
-  checkNumberTags();
 
-  tagsArray.forEach((tag) => {
-    if (tag.length < MIN_HASHTAG_LENGTH) {
-      uploadFileTextHashtags.setCustomValidity(`Ещё ${MIN_HASHTAG_LENGTH - tag.length} симв.`);
-    } else if (!regular.test(tag)) {
-      uploadFileTextHashtags.setCustomValidity('Некорректный хэштег');
-    } else if (numberTags === 1) {
-      uploadFileTextHashtags.setCustomValidity('Максимально 5 хештегов, пожалуйста удалите лишние');
-    } else {
-      uploadFileTextHashtags.setCustomValidity('');
-    }
-  });
+  if (tags.length > MAX_HASHTAGS) {
+    uploadFileTextHashtags.setCustomValidity('Максимально 5 хештегов, пожалуйста удалите лишние');
+  } else if (tags.length > 0 && tagsArray.size < tags.length) {
+    uploadFileTextHashtags.setCustomValidity('Обнаружены повторяющиеся хештеги, пожалуйста удалите лишние');
+  } else if (tagsArray.find((tag) => !regular.test(tag))) {
+    uploadFileTextHashtags.setCustomValidity('Некорректный хэштег');
+  }  else {
+    uploadFileTextHashtags.setCustomValidity('');
+  }
 
   uploadFileTextHashtags.reportValidity();
 });
