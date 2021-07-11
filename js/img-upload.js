@@ -6,6 +6,7 @@ const uploadCancel = document.querySelector('.img-upload__cancel');
 const imageEditor = document.querySelector('.img-upload__overlay');
 const uploadFileTextHashtags = document.querySelector('.text__hashtags');
 const MAX_HASHTAGS = 5;
+const MIN_HASHTAGS_LENGTH = 2;
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
@@ -46,19 +47,32 @@ uploadFileTextHashtags.addEventListener('input', () => {
 
   const tags = uploadFileTextHashtags.value
     .trim() // удаляем пробелы в начале и в конце строки
-    .toLowerCase() //хэш-теги нечувствительны к регистру
-    .split(' ')// преобразуем строку в массив, пробел используется как разделитель
+    .toLowerCase() //приводим все символы к нижнему регистру для проверки на дубли
+    .split(' ') // преобразуем строку в массив, пробел используется как разделитель
     .filter((tag) => tag); //удаляем пустые тэги, если пользователь ввёл несколько пробелов
 
   const tagsArray = new Set(tags);
+
+  // eslint-disable-next-line
+  console.log('tags = ' + tags);
+  // eslint-disable-next-line
+  console.log('tagsArray = ' + [tagsArray]);
+
+  // eslint-disable-next-line
+  console.log('tags.length = ' + tags.length);
+  // eslint-disable-next-line
+  console.log('tagsArray.length = ' + tagsArray.size);
+
 
   if (tags.length > MAX_HASHTAGS) {
     uploadFileTextHashtags.setCustomValidity('Максимально 5 хештегов, пожалуйста удалите лишние');
   } else if (tags.length > 0 && tagsArray.size < tags.length) {
     uploadFileTextHashtags.setCustomValidity('Обнаружены повторяющиеся хештеги, пожалуйста удалите лишние');
-  } else if (tagsArray.find((tag) => !regular.test(tag))) {
+  } else if (tags.find((tag) => tag.length < MIN_HASHTAGS_LENGTH)) {
+    uploadFileTextHashtags.setCustomValidity('Минимальное количество символов Хештега 2');
+  } else if (tags.find((tag) => !regular.test(tag))) {
     uploadFileTextHashtags.setCustomValidity('Некорректный хэштег');
-  }  else {
+  } else {
     uploadFileTextHashtags.setCustomValidity('');
   }
 
