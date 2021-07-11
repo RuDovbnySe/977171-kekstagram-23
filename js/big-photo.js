@@ -7,6 +7,7 @@ const bigPicture = document.querySelector('.big-picture');
 const commentParent = bigPicture.querySelector('.big-picture__social');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
+
 const commentsNumber = bigPicture.querySelector('.social__comment-count');
 const newCommentLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
@@ -74,6 +75,9 @@ const closeBigPictureModal = () => {
 const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
 
 photoOtherUsers.addEventListener('click', (evt) => {
+  if (!evt.target.closest('.picture')) {
+    return;
+  }
   evt.preventDefault();
   // Индекс фото, которое кликнуто
   const photoIndex = pictures.indexOf(evt.target.closest('.picture'));
@@ -95,4 +99,4 @@ closeBigPictureButton.addEventListener('click', (evt) => {
   closeBigPictureModal(evt);
 });
 
-export {bigPicture};
+export {bigPicture, body};
