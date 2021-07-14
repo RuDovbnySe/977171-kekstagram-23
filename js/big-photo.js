@@ -12,7 +12,8 @@ const moreCommentLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
 
 const commentsLoader = document.querySelector('.comments-loader');
-let NumberCommetsLoad = 5;
+let numberCommetsLoad = 5;
+let photoIndex = 0;
 
 // генерация списка с комментариями
 const cleanSocialComments = () => {
@@ -55,6 +56,29 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
+const handlerLoadComments = () => {
+  if (similarPhotos[photoIndex].comments.length > socialComments.children.length) {
+    if ((similarPhotos[photoIndex].comments.length - socialComments.children.length) >= 5) {
+      createCommentsList(numberCommetsLoad);
+      bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
+      // eslint-disable-next-line
+      console.log('Догружаем 5 комментов  ' + numberCommetsLoad);
+    } else if ((similarPhotos[photoIndex].comments.length - socialComments.children.length) < 5) {
+      numberCommetsLoad = (similarPhotos[photoIndex].comments.length - socialComments.children.length);
+      createCommentsList(numberCommetsLoad);
+      bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
+      commentsLoader.classList.add('hidden');
+      // eslint-disable-next-line
+      console.log('Догружаем остаток комментов  ' + numberCommetsLoad);
+    } else if (similarPhotos[photoIndex].comments.length === socialComments.children.length) {
+      commentsLoader.classList.add('hidden');
+      // eslint-disable-next-line
+      console.log('Все комменты выгружены' + numberCommetsLoad);
+    }
+  }
+  // eslint-disable-next-line
+  console.log(socialComments.children.length + ' из ' + similarPhotos[photoIndex].comments.length);
+};
 // показываем блок с полной картинкой, удалив класс hidden
 const openBigPictureModal = () => {
   bigPicture.classList.remove('hidden');
@@ -62,8 +86,8 @@ const openBigPictureModal = () => {
 
   document.addEventListener('keydown', onPopupEscKeydown);
   cleanSocialComments();
-  NumberCommetsLoad = 5;
-  // commentsLoader.addEventListener('click', handlerLoadComments);
+  numberCommetsLoad = 5;
+  commentsLoader.addEventListener('click', handlerLoadComments);
 };
 
 const closeBigPictureModal = () => {
@@ -74,7 +98,10 @@ const closeBigPictureModal = () => {
 
   document.removeEventListener('keydown', onPopupEscKeydown);
   cleanSocialComments();
-  NumberCommetsLoad = 5;
+  numberCommetsLoad = 0;
+  photoIndex = 0;
+  commentsLoader.removeEventListener('click', handlerLoadComments);
+  commentsLoader.classList.remove('hidden');
 };
 
 const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
@@ -85,8 +112,7 @@ photoOtherUsers.addEventListener('click', (evt) => {
   }
   evt.preventDefault();
   // Индекс фото, которое кликнуто
-  const photoIndex = pictures.indexOf(evt.target.closest('.picture'));
-  const similarPhotosCommentslength = similarPhotos[photoIndex].comments.length;
+  photoIndex = pictures.indexOf(evt.target.closest('.picture'));
   // загружаем атрибуты в разметку
   bigPicture.querySelector('.big-picture__img img').src = similarPhotos[photoIndex].url;
   bigPicture.querySelector('.likes-count').textContent = similarPhotos[photoIndex].likes;
@@ -95,57 +121,21 @@ photoOtherUsers.addEventListener('click', (evt) => {
 
   // показываем блок с полной картинкой, удалив класс hidden
   openBigPictureModal();
-  NumberCommetsLoad = 5;
-  const handlerLoadComments = () => {
-    if (similarPhotosCommentslength > socialComments.children.length) {
-      if ((similarPhotosCommentslength - socialComments.children.length) >= 5) {
-        // NumberCommetsLoad += 5;
-        createCommentsList(NumberCommetsLoad);
-        bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-        // eslint-disable-next-line
-        console.log('Догружаем 5 комментов  ' + NumberCommetsLoad);
-      } else if ((similarPhotosCommentslength - socialComments.children.length) < 5) {
-        NumberCommetsLoad = (similarPhotosCommentslength - socialComments.children.length);
-        createCommentsList(NumberCommetsLoad);
-        bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-        commentsLoader.classList.add('hidden');
-        // eslint-disable-next-line
-        console.log('Догружаем остаток комментов  ' + NumberCommetsLoad);
-      } else if (similarPhotosCommentslength === socialComments.children.length) {
-        commentsLoader.classList.add('hidden');
-        // eslint-disable-next-line
-        console.log('Все комменты выгружены' + NumberCommetsLoad);
-      }
-    }
-    // eslint-disable-next-line
-    console.log(socialComments.children.length + ' из ' + similarPhotos[photoIndex].comments.length);
-  };
+
   //загружаю первые 5 комментов
-  if (similarPhotosCommentslength <= NumberCommetsLoad) {
-    createCommentsList(similarPhotosCommentslength);
+  if (similarPhotos[photoIndex].comments.length >= numberCommetsLoad) {
+    createCommentsList(numberCommetsLoad);
     bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-    commentsLoader.classList.add('hidden');
-  } else if (createComments.length < similarPhotosCommentslength) {
-    createCommentsList(createComments.length);
-    bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-    commentsLoader.classList.add('hidden');
-  } else if (createComments.length > similarPhotosCommentslength) {
-    createCommentsList(NumberCommetsLoad);
-    bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-  } else if (createComments.length === similarPhotosCommentslength) {
-    createCommentsList(NumberCommetsLoad);
+  }  else {
+    createCommentsList(similarPhotos[photoIndex].comments.length);
     bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
     commentsLoader.classList.add('hidden');
   }
-  commentsLoader.addEventListener('click', handlerLoadComments);
-  closeBigPictureButton.addEventListener('click', (eventClose) => {
-    eventClose.preventDefault();
-    commentsLoader.removeEventListener('click', handlerLoadComments);
-    closeBigPictureModal();
-    commentsLoader.classList.remove('hidden');
-  });
   // eslint-disable-next-line
   console.log(socialComments.children.length + ' из ' + similarPhotos[photoIndex].comments.length);
 });
-
+closeBigPictureButton.addEventListener('click', (eventClose) => {
+  eventClose.preventDefault();
+  closeBigPictureModal();
+});
 export {bigPicture, body};
