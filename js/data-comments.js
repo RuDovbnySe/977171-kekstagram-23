@@ -22,7 +22,7 @@ const USERS_NAMES = [
   'Кристина',
 ];
 const MAX_AVATAR = 6;
-const MAX_COMMENT = 10;
+const MAX_COMMENT = 20;
 
 // рандомный элемент массива комментариев
 const createComment = (idUser) => ({
