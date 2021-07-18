@@ -5,8 +5,12 @@ const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
 const effectsList = document.querySelector('.effects__list');
 const imgUploadPreviewPhoto = document.querySelector('.img-upload__img');
-
+let valueFilter = 3;
 const effectNone = 'effect-none';
+
+const zoomElementValue = document.querySelector('.scale__control--value');
+const zoomElementSmaller = document.querySelector('.scale__control--smaller');
+const zoomElementBigger = document.querySelector('.scale__control--bigger');
 
 const checkedRadio = document.querySelector('input[name="effect"]:checked');
 
@@ -18,6 +22,7 @@ const effectToOptionsMap = {
     },
     step: 1,
     classPhoto: 'effect-none',
+    filterPhoto: 'None',
   },
   chrome: {
     range: {
@@ -26,6 +31,7 @@ const effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-chrome',
+    filterPhoto: `grayscale(${valueFilter})`,
   },
   sepia: {
     range: {
@@ -34,6 +40,7 @@ const effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-sepia',
+    filterPhoto: `sepia(${valueFilter})`,
   },
   marvin: {
     range: {
@@ -42,6 +49,7 @@ const effectToOptionsMap = {
     },
     step: 1,
     classPhoto: 'effect-marvin',
+    filterPhoto: `invert(${valueFilter}%)`,
   },
   phobos: {
     range: {
@@ -50,6 +58,7 @@ const effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-phobos',
+    filterPhoto: `blur(${valueFilter}px)`,
   },
   heat: {
     range: {
@@ -58,6 +67,8 @@ const effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-heat',
+    filterPhoto: `brightness(${valueFilter})`,
+    // filterPhoto: imgUploadPreviewPhoto.style.filter = 'brightness',
   },
 };
 
@@ -75,18 +86,18 @@ noUiSlider.create(sliderElement, {
   step: 1,
   connect: 'lower',
   classPhoto: 'effect-none',
+  filterPhoto: 'None',
 });
 
 sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
   valueElement.value = unencoded[handle];
+  valueFilter = valueElement.value;
   // eslint-disable-next-line
-  console.log(valueElement.value);
+  console.log(valueFilter);
 });
 
 effectsList.addEventListener('change', (evt) => {
   const options = effectToOptionsMap[evt.target.value];
-  // eslint-disable-next-line
-  console.log(options);
   if (evt.target.id === effectNone) {
     sliderElementBox.classList.add('hidden');
     imgUploadPreviewPhoto.classList.add('effect-none');
@@ -102,5 +113,40 @@ effectsList.addEventListener('change', (evt) => {
     start: options.range.max,
     step: options.step,
     classPhoto: imgUploadPreviewPhoto.classList.toggle(options.classPhoto),
+    filterPhoto: imgUploadPreviewPhoto.style.filter = options.filterPhoto,
+    // filterPhoto: `${options.filterPhoto}(${valueFilter})`,
+    // filterPhoto: options.filterPhoto + '(' + valueFilter + ')',
   });
+  // eslint-disable-next-line
+  console.log(options.filterPhoto);
 });
+
+zoomElementBigger.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  if (zoomElementValue.value === `${25}%`) {
+    zoomElementValue.value = `${50}%`;
+    imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(0.5)');
+  } else if (zoomElementValue.value === `${50}%`) {
+    zoomElementValue.value = `${75}%`;
+    imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(0.75)');
+  } else if (zoomElementValue.value === `${75}%`) {
+    zoomElementValue.value = `${100}%`;
+    imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(1)');
+  }
+});
+
+zoomElementSmaller.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  if (zoomElementValue.value === `${100}%`) {
+    zoomElementValue.value = `${75}%`;
+    imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(0.75)');
+  } else if (zoomElementValue.value === `${75}%`) {
+    zoomElementValue.value = `${50}%`;
+    imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(0.5)');
+  } else if (zoomElementValue.value === `${50}%`) {
+    zoomElementValue.value = `${25}%`;
+    imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(0.25)');
+  }
+});
+
+export {imgUploadPreviewPhoto};

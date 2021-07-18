@@ -2,6 +2,7 @@ import {photoOtherUsers} from './miniatures.js';
 import {similarPhotos} from './data-photo.js';
 import {similarComments} from './data-comments.js';
 import {isEscEvent} from './util.js';
+import {imgUploadPreviewPhoto} from './slider.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
@@ -99,6 +100,7 @@ const closeBigPictureModal = () => {
   photoIndex = 0;
   commentsLoader.removeEventListener('click', handlerLoadComments);
   commentsLoader.classList.remove('hidden');
+  imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(1)');
 };
 
 const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
