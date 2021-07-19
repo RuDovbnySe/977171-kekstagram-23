@@ -165,4 +165,4 @@ zoomElementSmaller.addEventListener('click', (evt) => {
   }
 });
 
-export {imgUploadPreviewPhoto};
+export {imgUploadPreviewPhoto, sliderElement};
