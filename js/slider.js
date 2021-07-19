@@ -110,6 +110,7 @@ effectsList.addEventListener('change', (evt) => {
   if (evt.target.id === effectNone) {
     sliderElementBox.classList.add('hidden');
     imgUploadPreviewPhoto.classList.add('effect-none');
+    imgUploadPreviewPhoto.style.filter = '';
   } else {
     sliderElementBox.classList.remove('hidden');
   }
@@ -165,4 +166,4 @@ zoomElementSmaller.addEventListener('click', (evt) => {
   }
 });
 
-export {imgUploadPreviewPhoto, sliderElement};
+export {imgUploadPreviewPhoto, sliderElement, sliderElementBox};
