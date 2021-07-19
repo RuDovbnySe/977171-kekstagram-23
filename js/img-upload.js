@@ -1,5 +1,6 @@
 import {isEscEvent} from './util.js';
 import {body} from './big-photo.js';
+import {imgUploadPreviewPhoto, sliderElementBox} from './slider.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('.img-upload__cancel');
@@ -29,6 +30,10 @@ const closeImageEditor = () => {
   uploadFile.value = '';
 
   document.removeEventListener('keydown', onPopupEscKeydown);
+  imgUploadPreviewPhoto.setAttribute('style', 'transform:scale(1)');
+  imgUploadPreviewPhoto.style = null;
+  imgUploadPreviewPhoto.className = 'img-upload__img';
+  sliderElementBox.classList.add('hidden');
 };
 
 uploadFile.addEventListener('change', function () {
