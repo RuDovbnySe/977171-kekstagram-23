@@ -7,18 +7,11 @@ const effectsList = document.querySelector('.effects__list');
 const imgUploadPreviewPhoto = document.querySelector('.img-upload__img');
 let valueFilter = 3;
 const effectNone = 'effect-none';
-
-const zoomElementValue = document.querySelector('.scale__control--value');
-const zoomElementSmaller = document.querySelector('.scale__control--smaller');
-const zoomElementBigger = document.querySelector('.scale__control--bigger');
-
-const checkedRadio = document.querySelector('input[name="effect"]:checked');
-
-const effectToOptionsMap = {
+let effectToOptionsMap = {
   none: {
     range: {
       min: 0,
-      max: 100,
+      max: 3,
     },
     step: 1,
     classPhoto: 'effect-none',
@@ -71,6 +64,12 @@ const effectToOptionsMap = {
     // filterPhoto: imgUploadPreviewPhoto.style.filter = 'brightness',
   },
 };
+// let options = 0;
+const zoomElementValue = document.querySelector('.scale__control--value');
+const zoomElementSmaller = document.querySelector('.scale__control--smaller');
+const zoomElementBigger = document.querySelector('.scale__control--bigger');
+
+const checkedRadio = document.querySelector('input[name="effect"]:checked');
 
 //Удалить слайдер для фильтра "оригинал"
 if (checkedRadio.id === effectNone) {
@@ -80,9 +79,9 @@ if (checkedRadio.id === effectNone) {
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
-    max: 100,
+    max: 3,
   },
-  start: 100,
+  start: 3,
   step: 1,
   connect: 'lower',
   classPhoto: 'effect-none',
@@ -92,6 +91,63 @@ noUiSlider.create(sliderElement, {
 sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
   valueElement.value = unencoded[handle];
   valueFilter = valueElement.value;
+  effectToOptionsMap = {
+    none: {
+      range: {
+        min: 0,
+        max: 3,
+      },
+      step: 1,
+      classPhoto: 'effect-none',
+      filterPhoto: 'None',
+    },
+    chrome: {
+      range: {
+        min: 0,
+        max: 1,
+      },
+      step: 0.1,
+      classPhoto: 'effect-chrome',
+      filterPhoto: `grayscale(${valueFilter})`,
+    },
+    sepia: {
+      range: {
+        min: 0,
+        max: 1,
+      },
+      step: 0.1,
+      classPhoto: 'effect-sepia',
+      filterPhoto: `sepia(${valueFilter})`,
+    },
+    marvin: {
+      range: {
+        min: 0,
+        max: 100,
+      },
+      step: 1,
+      classPhoto: 'effect-marvin',
+      filterPhoto: `invert(${valueFilter}%)`,
+    },
+    phobos: {
+      range: {
+        min: 0,
+        max: 3,
+      },
+      step: 0.1,
+      classPhoto: 'effect-phobos',
+      filterPhoto: `blur(${valueFilter}px)`,
+    },
+    heat: {
+      range: {
+        min: 1,
+        max: 3,
+      },
+      step: 0.1,
+      classPhoto: 'effect-heat',
+      filterPhoto: `brightness(${valueFilter})`,
+      // filterPhoto: imgUploadPreviewPhoto.style.filter = 'brightness',
+    },
+  };
   // eslint-disable-next-line
   console.log(valueFilter);
 });
@@ -104,21 +160,18 @@ effectsList.addEventListener('change', (evt) => {
   } else {
     sliderElementBox.classList.remove('hidden');
   }
+  imgUploadPreviewPhoto.className = 'img-upload__img';
 
   sliderElement.noUiSlider.updateOptions({
     range: {
       min: options.range.min,
       max: options.range.max,
     },
-    start: options.range.max,
     step: options.step,
+    start: options.range.max,
     classPhoto: imgUploadPreviewPhoto.classList.toggle(options.classPhoto),
     filterPhoto: imgUploadPreviewPhoto.style.filter = options.filterPhoto,
-    // filterPhoto: `${options.filterPhoto}(${valueFilter})`,
-    // filterPhoto: options.filterPhoto + '(' + valueFilter + ')',
   });
-  // eslint-disable-next-line
-  console.log(options.filterPhoto);
 });
 
 zoomElementBigger.addEventListener('click', (evt) => {
