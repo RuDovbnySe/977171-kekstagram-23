@@ -7,7 +7,18 @@ const effectsList = document.querySelector('.effects__list');
 const imgUploadPreviewPhoto = document.querySelector('.img-upload__img');
 let valueFilter = 3;
 const effectNone = 'effect-none';
-let effectToOptionsMap = {
+const currentOptions = {
+  range: {
+    min: '',
+    max: '',
+  },
+  start: '',
+  step: '',
+  classPhoto: '',
+  filterPhoto: 'none',
+  filterPhotoUnit:'',
+};
+const effectToOptionsMap = {
   none: {
     range: {
       min: 0,
@@ -16,6 +27,7 @@ let effectToOptionsMap = {
     step: 1,
     classPhoto: 'effect-none',
     filterPhoto: 'None',
+    filterPhotoUnit:'',
   },
   chrome: {
     range: {
@@ -24,7 +36,8 @@ let effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-chrome',
-    filterPhoto: `grayscale(${valueFilter})`,
+    filterPhoto: 'grayscale',
+    filterPhotoUnit:'',
   },
   sepia: {
     range: {
@@ -33,7 +46,8 @@ let effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-sepia',
-    filterPhoto: `sepia(${valueFilter})`,
+    filterPhoto: 'sepia',
+    filterPhotoUnit:'',
   },
   marvin: {
     range: {
@@ -42,7 +56,8 @@ let effectToOptionsMap = {
     },
     step: 1,
     classPhoto: 'effect-marvin',
-    filterPhoto: `invert(${valueFilter}%)`,
+    filterPhoto: 'invert',
+    filterPhotoUnit: '%',
   },
   phobos: {
     range: {
@@ -51,7 +66,8 @@ let effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-phobos',
-    filterPhoto: `blur(${valueFilter}px)`,
+    filterPhoto: 'blur',
+    filterPhotoUnit:'px',
   },
   heat: {
     range: {
@@ -60,7 +76,8 @@ let effectToOptionsMap = {
     },
     step: 0.1,
     classPhoto: 'effect-heat',
-    filterPhoto: `brightness(${valueFilter})`,
+    filterPhoto: 'brightness',
+    filterPhotoUnit:'',
     // filterPhoto: imgUploadPreviewPhoto.style.filter = 'brightness',
   },
 };
@@ -88,70 +105,6 @@ noUiSlider.create(sliderElement, {
   filterPhoto: 'None',
 });
 
-sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
-  valueElement.value = unencoded[handle];
-  valueFilter = valueElement.value;
-  effectToOptionsMap = {
-    none: {
-      range: {
-        min: 0,
-        max: 3,
-      },
-      step: 1,
-      classPhoto: 'effect-none',
-      filterPhoto: 'None',
-    },
-    chrome: {
-      range: {
-        min: 0,
-        max: 1,
-      },
-      step: 0.1,
-      classPhoto: 'effect-chrome',
-      filterPhoto: `grayscale(${valueFilter})`,
-    },
-    sepia: {
-      range: {
-        min: 0,
-        max: 1,
-      },
-      step: 0.1,
-      classPhoto: 'effect-sepia',
-      filterPhoto: `sepia(${valueFilter})`,
-    },
-    marvin: {
-      range: {
-        min: 0,
-        max: 100,
-      },
-      step: 1,
-      classPhoto: 'effect-marvin',
-      filterPhoto: `invert(${valueFilter}%)`,
-    },
-    phobos: {
-      range: {
-        min: 0,
-        max: 3,
-      },
-      step: 0.1,
-      classPhoto: 'effect-phobos',
-      filterPhoto: `blur(${valueFilter}px)`,
-    },
-    heat: {
-      range: {
-        min: 1,
-        max: 3,
-      },
-      step: 0.1,
-      classPhoto: 'effect-heat',
-      filterPhoto: `brightness(${valueFilter})`,
-      // filterPhoto: imgUploadPreviewPhoto.style.filter = 'brightness',
-    },
-  };
-  // eslint-disable-next-line
-  console.log(valueFilter);
-});
-
 effectsList.addEventListener('change', (evt) => {
   const options = effectToOptionsMap[evt.target.value];
   if (evt.target.id === effectNone) {
@@ -161,6 +114,8 @@ effectsList.addEventListener('change', (evt) => {
     sliderElementBox.classList.remove('hidden');
   }
   imgUploadPreviewPhoto.className = 'img-upload__img';
+  currentOptions.filterPhoto = options.filterPhoto;
+  currentOptions.filterPhotoUnit = options.filterPhotoUnit;
 
   sliderElement.noUiSlider.updateOptions({
     range: {
@@ -170,8 +125,16 @@ effectsList.addEventListener('change', (evt) => {
     step: options.step,
     start: options.range.max,
     classPhoto: imgUploadPreviewPhoto.classList.toggle(options.classPhoto),
-    filterPhoto: imgUploadPreviewPhoto.style.filter = options.filterPhoto,
   });
+});
+
+sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
+  if (!currentOptions) {
+    return;
+  }
+  valueElement.value = unencoded[handle];
+  valueFilter = valueElement.value;
+  imgUploadPreviewPhoto.style.filter = `${currentOptions.filterPhoto}(${valueFilter}${currentOptions.filterPhotoUnit})`;
 });
 
 zoomElementBigger.addEventListener('click', (evt) => {
