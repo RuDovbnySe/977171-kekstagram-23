@@ -24,7 +24,6 @@ const USERS_NAMES = [
 ];
 const MAX_AVATAR = 6;
 const MAX_COMMENT = 20;
-
 // рандомный элемент массива комментариев
 const createComment = (idUser) => ({
   id: idUser + 1,

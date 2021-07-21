@@ -7,15 +7,12 @@ import {getData} from './api.js';
 const bigPicture = document.querySelector('.big-picture');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
-
 const commentsNumber = bigPicture.querySelector('.social__comment-count');
 const moreCommentLoader = bigPicture.querySelector('.comments-loader');
 const body = document.querySelector('body');
-
 const commentsLoader = document.querySelector('.comments-loader');
 let numberCommetsLoad = 5;
 let photoIndex = 0;
-
 // генерация списка с комментариями
 const cleanSocialComments = () => {
   while (socialComments.hasChildNodes()) {
@@ -45,10 +42,8 @@ const createCommentsList = (startLength) => createComments
     paragraph.classList.add('social__text');
     paragraph.textContent = message;
     li.appendChild(paragraph);
-
     socialComments.appendChild(li);
   });
-
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
@@ -81,19 +76,16 @@ const handlerLoadComments = () => {
 const openBigPictureModal = () => {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
-
   document.addEventListener('keydown', onPopupEscKeydown);
   cleanSocialComments();
   numberCommetsLoad = 5;
   commentsLoader.addEventListener('click', handlerLoadComments);
 };
-
 const closeBigPictureModal = () => {
   bigPicture.classList.add('hidden');
   commentsNumber.classList.remove('hidden');
   moreCommentLoader.classList.remove('hidden');
   body.classList.remove('modal-open');
-
   document.removeEventListener('keydown', onPopupEscKeydown);
   cleanSocialComments();
   numberCommetsLoad = 0;

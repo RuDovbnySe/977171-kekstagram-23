@@ -1,7 +1,3 @@
-// import './miniatures.js';
-// import './big-photo.js';
-import './user-modal.js';
-import './user-form.js';
 import './nouislider.js';
 import {getData} from './api.js';
 // import './slider.js';
