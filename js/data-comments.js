@@ -1,4 +1,5 @@
 import {getRandomArrayElement, getRandomNumber} from './util.js';
+// import {photoOtherUsers} from "./miniatures";
 
 const MESSAGES = [
   'Всё отлично!',
@@ -23,7 +24,6 @@ const USERS_NAMES = [
 ];
 const MAX_AVATAR = 6;
 const MAX_COMMENT = 20;
-
 // рандомный элемент массива комментариев
 const createComment = (idUser) => ({
   id: idUser + 1,
@@ -33,6 +33,8 @@ const createComment = (idUser) => ({
 });
 
 // создаём массив комментов
-const similarComments = new Array(MAX_COMMENT).fill(null).map((item, index) => createComment(index));
+const similarComments = new Array(MAX_COMMENT)
+  .fill(null)
+  .map((item, index) => createComment(index));
 
 export {similarComments, MAX_COMMENT};
