@@ -1,8 +1,5 @@
 import {photoOtherUsers} from './miniatures.js';
-import {createPhotos} from './miniatures.js';
-// import {similarComments} from './data-comments.js';
 import {isEscEvent} from './util.js';
-import {getData} from './api.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
@@ -13,6 +10,8 @@ const body = document.querySelector('body');
 const commentsLoader = document.querySelector('.comments-loader');
 let numberCommetsLoad = 5;
 let photoIndex = 0;
+let createPhotos;
+let createComments;
 // генерация списка с комментариями
 const cleanSocialComments = () => {
   while (socialComments.hasChildNodes()) {
@@ -21,8 +20,6 @@ const cleanSocialComments = () => {
 };
 
 cleanSocialComments();
-
-// const createComments = similarComments;
 
 // Функция по загрузке массива комментариев в список <ul>
 const createCommentsList = (startLength) => createComments
@@ -94,8 +91,6 @@ const closeBigPictureModal = () => {
   commentsLoader.classList.remove('hidden');
 };
 
-const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
-
 const getComments = (photosData, index) => {
   // bigPicture.querySelector('.big-picture__img img').src = photosData.url;
   bigPicture.querySelector('.likes-count').textContent = photosData[index].likes;
@@ -103,36 +98,38 @@ const getComments = (photosData, index) => {
   bigPicture.querySelector('.social__caption').textContent = photosData[index].description;
 };
 
-photoOtherUsers.addEventListener('click', (evt) => {
-  if (!evt.target.closest('.picture')) {
-    return;
-  }
-  evt.preventDefault();
-  // Индекс фото, которое кликнуто
-  photoIndex = pictures.indexOf(evt.target.closest('.picture'));
-  // загружаем атрибуты в разметку
-  getComments(getData, photoIndex);
-  bigPicture.querySelector('.big-picture__img img').src = evt.target.src;
-  // bigPicture.querySelector('.likes-count').textContent = evt.target.likes;
-  // bigPicture.querySelector('.comments-count').textContent = evt.target.comments;
-  // bigPicture.querySelector('.social__caption').textContent = evt.target.description;
+const createOnPhotosClick = (photosData) => {
+  const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
+  createPhotos = photosData;
 
-  // показываем блок с полной картинкой, удалив класс hidden
-  openBigPictureModal();
+  return (evt) => {
+    if (!evt.target.closest('.picture')) {
+      return;
+    }
+    evt.preventDefault();
+    photoIndex = pictures.indexOf(evt.target.closest('.picture'));
+    createComments = photosData[photoIndex].comments;
+    getComments(photosData, photoIndex);
+    bigPicture.querySelector('.big-picture__img img').src = evt.target.src;
 
-  //загружаю первые 5 комментов
-  if (createPhotos[photoIndex].comments.length > numberCommetsLoad) {
-    createCommentsList(numberCommetsLoad);
-    bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-  }  else {
-    createCommentsList(createPhotos[photoIndex].comments.length);
-    bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
-    commentsLoader.classList.add('hidden');
-  }
-});
+    // показываем блок с полной картинкой, удалив класс hidden
+    openBigPictureModal();
+
+    //загружаю первые 5 комментов
+    if (photosData[photoIndex].comments.length > numberCommetsLoad) {
+      createCommentsList(numberCommetsLoad);
+      bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
+    }  else {
+      createCommentsList(photosData[photoIndex].comments.length);
+      bigPicture.querySelector('.comments-count-length').textContent = socialComments.children.length;
+      commentsLoader.classList.add('hidden');
+    }
+  };
+};
+
 closeBigPictureButton.addEventListener('click', (eventClose) => {
   eventClose.preventDefault();
   closeBigPictureModal();
 });
 
-export {bigPicture, body};
+export {bigPicture, body, createOnPhotosClick};

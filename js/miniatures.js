@@ -1,4 +1,4 @@
-// import {similarPhotos} from './data-photo.js';
+import {createOnPhotosClick} from './big-photo.js';
 
 const photoOtherUsers = document.querySelector('.pictures');
 
@@ -6,8 +6,7 @@ const similarPhotoTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-// const createPhotos = similarPhotos;
-const createPhotos = (photosData) => {
+const renderPhotos = (photosData) => {
   const similarPhotoFragment = document.createDocumentFragment();
   photosData.forEach(({url, comments, likes}) => {
     const photoElement = similarPhotoTemplate.cloneNode(true);
@@ -19,4 +18,9 @@ const createPhotos = (photosData) => {
   photoOtherUsers.appendChild(similarPhotoFragment);
 };
 
-export {photoOtherUsers, createPhotos};
+const createPhotos = (photosData) => {
+  renderPhotos(photosData);
+  photoOtherUsers.addEventListener('click', createOnPhotosClick(photosData));
+};
+
+export {photoOtherUsers, createPhotos, renderPhotos};
