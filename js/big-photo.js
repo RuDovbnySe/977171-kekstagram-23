@@ -49,7 +49,7 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 //функция отображения количества показанных комментариев
-const handlerLoadComments = () => {
+const sidebarClickHandler = () => {
   if (createPhotos[photoIndex].comments.length > socialComments.children.length) {
     if ((createPhotos[photoIndex].comments.length - socialComments.children.length) > 5) {
       createCommentsList(numberCommetsLoad);
@@ -76,7 +76,7 @@ const openBigPictureModal = () => {
   document.addEventListener('keydown', onPopupEscKeydown);
   cleanSocialComments();
   numberCommetsLoad = 5;
-  commentsLoader.addEventListener('click', handlerLoadComments);
+  commentsLoader.addEventListener('click', sidebarClickHandler);
 };
 const closeBigPictureModal = () => {
   bigPicture.classList.add('hidden');
@@ -87,12 +87,11 @@ const closeBigPictureModal = () => {
   cleanSocialComments();
   numberCommetsLoad = 0;
   photoIndex = 0;
-  commentsLoader.removeEventListener('click', handlerLoadComments);
+  commentsLoader.removeEventListener('click', sidebarClickHandler);
   commentsLoader.classList.remove('hidden');
 };
 
 const getComments = (photosData, index) => {
-  // bigPicture.querySelector('.big-picture__img img').src = photosData.url;
   bigPicture.querySelector('.likes-count').textContent = photosData[index].likes;
   bigPicture.querySelector('.comments-count').textContent = photosData[index].comments.length;
   bigPicture.querySelector('.social__caption').textContent = photosData[index].description;

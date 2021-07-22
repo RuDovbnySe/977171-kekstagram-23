@@ -1,5 +1,4 @@
 import {getRandomArrayElement, getRandomNumber} from './util.js';
-// import {photoOtherUsers} from "./miniatures";
 
 const MESSAGES = [
   'Всё отлично!',

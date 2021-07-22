@@ -7,6 +7,12 @@ const effectsList = document.querySelector('.effects__list');
 const imgUploadPreviewPhoto = document.querySelector('.img-upload__img');
 let valueFilter = 3;
 const effectNone = 'effect-none';
+const zoomElementValue = document.querySelector('.scale__control--value');
+const zoomElementSmaller = document.querySelector('.scale__control--smaller');
+const zoomElementBigger = document.querySelector('.scale__control--bigger');
+
+const checkedRadio = document.querySelector('input[name="effect"]:checked');
+
 const currentOptions = {
   range: {
     min: '',
@@ -78,15 +84,8 @@ const effectToOptionsMap = {
     classPhoto: 'effect-heat',
     filterPhoto: 'brightness',
     filterPhotoUnit:'',
-    // filterPhoto: imgUploadPreviewPhoto.style.filter = 'brightness',
   },
 };
-// let options = 0;
-const zoomElementValue = document.querySelector('.scale__control--value');
-const zoomElementSmaller = document.querySelector('.scale__control--smaller');
-const zoomElementBigger = document.querySelector('.scale__control--bigger');
-
-const checkedRadio = document.querySelector('input[name="effect"]:checked');
 
 //Удалить слайдер для фильтра "оригинал"
 if (checkedRadio.id === effectNone) {
