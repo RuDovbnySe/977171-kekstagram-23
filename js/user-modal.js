@@ -45,7 +45,7 @@ const closeImageEditor = () => {
   imgUploadPreviewPhoto.style = null;
   imgUploadPreviewPhoto.className = 'img-upload__img';
   sliderElementBox.classList.add('hidden');
-  previewPhoto.src = 'img/upload-default-image.jpg';
+  previewPhoto.src = '';
   uploadFileTextDescriptions.value = '';
   uploadFileTextHashtags.value = '';
   zoomElementValue.value = `${100}%`;
