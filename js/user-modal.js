@@ -54,7 +54,7 @@ const closeImageEditor = () => {
   effectLevelValue.value = '';
 };
 
-uploadFile.addEventListener('change', function () {
+uploadFile.addEventListener('change',  () => {
   if (this.value) {
     openImageEditor();
   }
@@ -130,7 +130,7 @@ uploadFileTextHashtags.addEventListener('input', () => {
   uploadFileTextHashtags.reportValidity();
 });
 
-uploadFile.addEventListener('change', function () {
+uploadFile.addEventListener('change',  () => {
   if (this.value) {
     openImageEditor();
   }

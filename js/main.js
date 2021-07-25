@@ -1,4 +1,3 @@
-import './user-modal.js';
 import './nouislider.js';
 import {getData} from './api.js';
 import {createPhotos, activateFilters} from './miniatures.js';

@@ -49,7 +49,7 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 //функция отображения количества показанных комментариев
-const sidebarClickHandler = () => {
+const onSiderbarClick = () => {
   if (createPhotos[photoIndex].comments.length > socialComments.children.length) {
     if ((createPhotos[photoIndex].comments.length - socialComments.children.length) > 5) {
       createCommentsList(numberCommetsLoad);
@@ -76,7 +76,7 @@ const openBigPictureModal = () => {
   document.addEventListener('keydown', onPopupEscKeydown);
   cleanSocialComments();
   numberCommetsLoad = 5;
-  commentsLoader.addEventListener('click', sidebarClickHandler);
+  commentsLoader.addEventListener('click', onSiderbarClick);
 };
 const closeBigPictureModal = () => {
   bigPicture.classList.add('hidden');
@@ -87,24 +87,24 @@ const closeBigPictureModal = () => {
   cleanSocialComments();
   numberCommetsLoad = 0;
   photoIndex = 0;
-  commentsLoader.removeEventListener('click', sidebarClickHandler);
+  commentsLoader.removeEventListener('click', onSiderbarClick);
   commentsLoader.classList.remove('hidden');
 };
 
 const getComments = (photosData, index) => {
-  bigPicture.querySelector('.likes-count').textContent = photosData[index].likes;
+  bigPicture.querySelector('.likes-count').textContent = photosData[index].likes.toString();
   bigPicture.querySelector('.comments-count').textContent = photosData[index].comments.length.toString();
   bigPicture.querySelector('.social__caption').textContent = photosData[index].description;
 };
 
 const createOnPhotosClick = (photosData) => {
-  const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
   createPhotos = photosData;
 
   return (evt) => {
     if (!evt.target.closest('.picture')) {
       return;
     }
+    const pictures = Array.from(photoOtherUsers.querySelectorAll('.picture'));
     evt.preventDefault();
     photoIndex = pictures.indexOf(evt.target.closest('.picture'));
     createComments = photosData[photoIndex].comments;
