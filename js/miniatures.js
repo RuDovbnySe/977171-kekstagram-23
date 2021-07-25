@@ -1,14 +1,14 @@
 import {createOnPhotosClick} from './big-photo.js';
 import {debounce} from './utils/debounce.js';
 
+const NUMBER_RANDOM_FILTER_PHOTO = 10;
+const RERENDER_DELAY = 500;
 const photoOtherUsers = document.querySelector('.pictures');
 const filterPhoto = document.querySelector('.img-filters');
 const filterDefault = document.querySelector('#filter-default');
 const filterRandom = document.querySelector('#filter-random');
 const filterDiscussed = document.querySelector('#filter-discussed');
 const filtersForm = document.querySelector('.img-filters__form');
-const NUMBER_RANDOM_FILTER_PHOTO = 10;
-const RERENDER_DELAY = 500;
 
 const similarPhotoTemplate = document.querySelector('#picture')
   .content
