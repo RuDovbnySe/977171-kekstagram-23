@@ -1,8 +1,12 @@
 import {isEscEvent, showAlert} from './util.js';
 import {body} from './big-photo.js';
-import {imgUploadPreviewPhoto, sliderElement, sliderElementBox, zoomElementValue} from './slider.js';
+import {imgUploadPreviewPhoto, sliderElementBox, zoomElementValue} from './slider.js';
 import {sendData} from './api.js';
 
+const MAX_HASHTAGS = 5;
+const MIN_HASHTAGS_LENGTH = 2;
+const MAX_COMMENT_LENGTH = 140;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const uploadFile = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('.img-upload__cancel');
 const imageEditor = document.querySelector('.img-upload__overlay');
@@ -12,10 +16,6 @@ const fileChooser = document.querySelector('.img-upload__input[type=file]');
 const previewPhoto = document.querySelector('.img-upload__img');
 const hashtegForm = document.querySelector('.img-upload__form');
 const effectLevelValue = document.querySelector('.effect-level__value');
-const MAX_HASHTAGS = 5;
-const MIN_HASHTAGS_LENGTH = 2;
-const MAX_COMMENT_LENGTH = 140;
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
@@ -48,7 +48,7 @@ const closeImageEditor = () => {
   previewPhoto.src = '';
   uploadFileTextDescriptions.value = '';
   uploadFileTextHashtags.value = '';
-  zoomElementValue.value = `${100}%`;
+  zoomElementValue.value = '100%';
   uploadFileTextHashtags.classList.remove('text__hashtags--error');
   uploadFileTextDescriptions.classList.remove('text__hashtags--error');
   effectLevelValue.value = '';

@@ -93,7 +93,7 @@ const closeBigPictureModal = () => {
 
 const getComments = (photosData, index) => {
   bigPicture.querySelector('.likes-count').textContent = photosData[index].likes;
-  bigPicture.querySelector('.comments-count').textContent = photosData[index].comments.length;
+  bigPicture.querySelector('.comments-count').textContent = photosData[index].comments.length.toString();
   bigPicture.querySelector('.social__caption').textContent = photosData[index].description;
 };
 
