@@ -1,5 +1,4 @@
 const ALERT_SHOW_TIME = 5000;
-
 // событие на кнопке Escape
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 //рандомное число из диапазона
