@@ -1,6 +1,7 @@
-import {isEscEvent} from './util.js';
+import {isEscEvent, showAlert} from './util.js';
 import {body} from './big-photo.js';
-import {imgUploadPreviewPhoto, sliderElementBox} from './slider.js';
+import {imgUploadPreviewPhoto, sliderElement, sliderElementBox, zoomElementValue} from './slider.js';
+import {sendData} from './api.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('.img-upload__cancel');
@@ -9,8 +10,11 @@ const uploadFileTextHashtags = document.querySelector('.text__hashtags');
 const uploadFileTextDescriptions = document.querySelector('.text__description');
 const fileChooser = document.querySelector('.img-upload__input[type=file]');
 const previewPhoto = document.querySelector('.img-upload__img');
+const hashtegForm = document.querySelector('.img-upload__form');
+const effectLevelValue = document.querySelector('.effect-level__value');
 const MAX_HASHTAGS = 5;
 const MIN_HASHTAGS_LENGTH = 2;
+const MAX_COMMENT_LENGTH = 140;
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const onPopupEscKeydown = (evt) => {
@@ -41,9 +45,13 @@ const closeImageEditor = () => {
   imgUploadPreviewPhoto.style = null;
   imgUploadPreviewPhoto.className = 'img-upload__img';
   sliderElementBox.classList.add('hidden');
-  previewPhoto.src = '';
+  previewPhoto.src = 'img/upload-default-image.jpg';
   uploadFileTextDescriptions.value = '';
   uploadFileTextHashtags.value = '';
+  zoomElementValue.value = `${100}%`;
+  uploadFileTextHashtags.classList.remove('text__hashtags--error');
+  uploadFileTextDescriptions.classList.remove('text__hashtags--error');
+  effectLevelValue.value = '';
 };
 
 uploadFile.addEventListener('change', function () {
@@ -73,6 +81,20 @@ fileChooser.addEventListener('change', () => {
   }
 });
 
+//вывод сообщения при некорректном вводе комментария
+uploadFileTextDescriptions.addEventListener('input', () => {
+  const commentArea = uploadFileTextDescriptions.value.length;
+  if (commentArea > MAX_COMMENT_LENGTH) {
+    uploadFileTextDescriptions.setCustomValidity('Не более 140 символов');
+    uploadFileTextDescriptions.classList.add('text__description-error');
+  } else {
+    uploadFileTextDescriptions.setCustomValidity('');
+    uploadFileTextDescriptions.classList.remove('text__description-error');
+  }
+
+  uploadFileTextDescriptions.reportValidity();
+});
+
 //вывод сообщения при некорректном вводе хэштега
 uploadFileTextHashtags.addEventListener('input', () => {
   const regular = /^#(?=.*[^0-9])[a-zA-Zа-яА-ЯЁё0-9]{1,19}$/;
@@ -84,6 +106,7 @@ uploadFileTextHashtags.addEventListener('input', () => {
     .filter((tag) => tag); //удаляем пустые тэги, если пользователь ввёл несколько пробелов
 
   const tagsArray = new Set(tags);
+  let isValid = false;
 
   if (tags.length > MAX_HASHTAGS) {
     uploadFileTextHashtags.setCustomValidity('Максимально 5 хештегов, пожалуйста удалите лишние');
@@ -94,10 +117,39 @@ uploadFileTextHashtags.addEventListener('input', () => {
   } else if (tags.find((tag) => !regular.test(tag))) {
     uploadFileTextHashtags.setCustomValidity('Некорректный хэштег');
   } else {
+    isValid = true;
     uploadFileTextHashtags.setCustomValidity('');
+  }
+
+  if (isValid === true) {
+    uploadFileTextHashtags.classList.remove('text__hashtags--error');
+  } else {
+    uploadFileTextHashtags.classList.add('text__hashtags--error');
   }
 
   uploadFileTextHashtags.reportValidity();
 });
 
-export {openImageEditor, closeImageEditor};
+uploadFile.addEventListener('change', function () {
+  if (this.value) {
+    openImageEditor();
+  }
+});
+
+uploadCancel.addEventListener('click', (evt) => {
+  closeImageEditor(evt);
+});
+
+const setUserFormSubmit = (onSuccess) => {
+  hashtegForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {openImageEditor, closeImageEditor, uploadFileTextHashtags, setUserFormSubmit};

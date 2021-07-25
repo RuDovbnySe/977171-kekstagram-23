@@ -1,10 +1,14 @@
 import {createOnPhotosClick} from './big-photo.js';
+import {debounce} from './utils/debounce.js';
 
 const photoOtherUsers = document.querySelector('.pictures');
 const filterPhoto = document.querySelector('.img-filters');
 const filterDefault = document.querySelector('#filter-default');
 const filterRandom = document.querySelector('#filter-random');
 const filterDiscussed = document.querySelector('#filter-discussed');
+const filtersForm = document.querySelector('.img-filters__form');
+const NUMBER_RANDOM_FILTER_PHOTO = 10;
+const RERENDER_DELAY = 500;
 
 const similarPhotoTemplate = document.querySelector('#picture')
   .content
@@ -31,7 +35,7 @@ const createPhotos = (photosData) => {
 //Фильтрация фото
 //отрисовка по умолчанию, т.е. по данным от сервера
 const activeFilterDefault = (photosData) => {
-  filterDefault.addEventListener('click', (evt) => {
+  filterDefault.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     filterDiscussed.classList.remove('img-filters__button--active');
     filterDefault.classList.add('img-filters__button--active');
@@ -53,11 +57,11 @@ const activeFilterDefault = (photosData) => {
       });
     photoOtherUsers.appendChild(similarPhotoFragment);
     filterPhoto.classList.remove('img-filters--inactive');
-  });
+  }, RERENDER_DELAY));
 };
 //отрисовка 10 рандомных, не повторяющихся фото
 const activeFilterRandom = (photosData) => {
-  filterRandom.addEventListener('click', (evt) => {
+  filterRandom.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     filterDiscussed.classList.remove('img-filters__button--active');
     filterDefault.classList.remove('img-filters__button--active');
@@ -72,6 +76,7 @@ const activeFilterRandom = (photosData) => {
     photosData
       .slice()
       .sort(() => Math.random() - 0.5)
+      .slice(photosData.length - NUMBER_RANDOM_FILTER_PHOTO)
       .forEach(({url, comments, likes}) => {
         const photoElement = similarPhotoTemplate.cloneNode(true);
         photoElement.querySelector('.picture__img').src = url;
@@ -81,11 +86,12 @@ const activeFilterRandom = (photosData) => {
       });
     photoOtherUsers.appendChild(similarPhotoFragment);
     filterPhoto.classList.remove('img-filters--inactive');
-  });
+  }, RERENDER_DELAY));
 };
+
 //отрисовка с сортировкой по количеству комментов
 const activeFilterDiscussed = (photosData) => {
-  filterDiscussed.addEventListener('click', (evt) => {
+  filterDiscussed.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     filterDefault.classList.remove('img-filters__button--active');
     filterRandom.classList.remove('img-filters__button--active');
@@ -109,7 +115,17 @@ const activeFilterDiscussed = (photosData) => {
       });
     photoOtherUsers.appendChild(similarPhotoFragment);
     filterPhoto.classList.remove('img-filters--inactive');
-  });
+  }, RERENDER_DELAY));
 };
 
-export {createPhotos, renderPhotos, activeFilterDiscussed, activeFilterRandom, activeFilterDefault, photoOtherUsers};
+filtersForm.addEventListener('click', debounce((evt) => {
+  evt.preventDefault();
+}, RERENDER_DELAY));
+
+export {
+  createPhotos,
+  renderPhotos,
+  activeFilterDiscussed,
+  activeFilterRandom,
+  activeFilterDefault,
+  photoOtherUsers};
