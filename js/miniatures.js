@@ -1,4 +1,4 @@
-import {createOnPhotosClick} from './big-photo.js';
+import {createOnPhotosClick, updateData} from './big-photo.js';
 import {debounce} from './utils/debounce.js';
 
 const NUMBER_RANDOM_FILTER_PHOTO = 10;
@@ -34,21 +34,24 @@ const createPhotos = (photosData) => {
 
 const filterByDefault = (photosData) => {
   filterDefault.classList.add('img-filters__button--active');
+  updateData(photosData);
   renderPhotos(photosData);
 };
 
 const filterByRandom = (photosData) => {
   filterRandom.classList.add('img-filters__button--active');
-  renderPhotos(
-    photosData.slice()
-      .sort(() => Math.random() - 0.5)
-      .slice(photosData.length - NUMBER_RANDOM_FILTER_PHOTO),
-  );
+  const newData = photosData.slice()
+    .sort(() => Math.random() - 0.5)
+    .slice(photosData.length - NUMBER_RANDOM_FILTER_PHOTO);
+  updateData(newData);
+  renderPhotos(newData);
 };
 
 const filterByDiscussed = (photosData) => {
   filterDiscussed.classList.add('img-filters__button--active');
-  renderPhotos(photosData.slice().sort((a, b) => (b.comments.length - a.comments.length)));
+  const newData = photosData.slice().sort((a, b) => (b.comments.length - a.comments.length));
+  updateData(newData);
+  renderPhotos(newData);
 };
 
 const clearPreviousFilters = () => {
