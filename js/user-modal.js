@@ -55,7 +55,7 @@ const closeImageEditor = () => {
 };
 
 uploadFile.addEventListener('change',  () => {
-  if (this.value) {
+  if (uploadFile.value) {
     openImageEditor();
   }
 });
@@ -128,16 +128,6 @@ uploadFileTextHashtags.addEventListener('input', () => {
   }
 
   uploadFileTextHashtags.reportValidity();
-});
-
-uploadFile.addEventListener('change',  () => {
-  if (this.value) {
-    openImageEditor();
-  }
-});
-
-uploadCancel.addEventListener('click', (evt) => {
-  closeImageEditor(evt);
 });
 
 const setUserFormSubmit = (onSuccess) => {
